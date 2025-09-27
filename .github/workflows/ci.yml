@@ -102,22 +102,22 @@ jobs:
       run: |
         if [ -f build/compile_commands.json ]; then
           find src include -name "*.cc" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" | \
-          xargs clang-tidy -p build --config-file=.clangd
+          xargs clang-tidy -p build --config-file=.clangd --warnings-as-errors='*'
         fi
 
     - name: Check code formatting
       run: |
-        find src include -name "*.cc" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" | \
-        xargs clang-format --dry-run --Werror --style=Google
+        find src include examples tests -name "*.cc" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" | \
+        xargs clang-format --dry-run --Werror --style=file
 
     - name: Run cppcheck
       run: |
-        cppcheck --enable=all --inconclusive --std=c++17 \
+        cppcheck --enable=all --inconclusive --std=c++20 \
           --suppress=missingIncludeSystem \
           --suppress=unmatchedSuppression \
           --suppress=unusedFunction \
           --error-exitcode=1 \
-          src/ include/
+          src/ include/ examples/ tests/
 
   sanitizers:
     name: Memory Sanitizers

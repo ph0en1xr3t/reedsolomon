@@ -33,11 +33,28 @@
                     "--clang-tidy",
                     "--completion-style=detailed",
                     "--header-insertion=iwyu",
-                    "--suggest-missing-includes"
+                    "--suggest-missing-includes",
+                    "--all-scopes-completion",
+                    "--background-index",
+                    "--pch-storage=memory"
                 ],
                 "clangd.fallbackFlags": [
-                    "-std=c++17"
-                ]
+                    "-std=c++20",
+                    "-Wall",
+                    "-Wextra",
+                    "-Wpedantic"
+                ],
+                "editor.formatOnSave": true,
+                "editor.formatOnType": true,
+                "editor.formatOnPaste": true,
+                "C_Cpp.clang_format_style": "file",
+                "C_Cpp.clang_format_fallbackStyle": "Google",
+                "files.trimTrailingWhitespace": true,
+                "files.insertFinalNewline": true,
+                "files.trimFinalNewlines": true,
+                "editor.rulers": [80],
+                "editor.wordWrap": "wordWrapColumn",
+                "editor.wordWrapColumn": 80
             },
             "extensions": [
                 "ms-vscode.cpptools",

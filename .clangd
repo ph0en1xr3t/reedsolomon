@@ -1,9 +1,17 @@
 CompileFlags:
   Add: 
-    - "-std=c++17"
+    - "-std=c++20"
     - "-Wall"
     - "-Wextra"
     - "-Wpedantic"
+    - "-Wconversion"
+    - "-Wsign-conversion"
+    - "-Wcast-align"
+    - "-Wformat=2"
+    - "-Wunused"
+    - "-Wnull-dereference"
+    - "-Wdouble-promotion"
+    - "-Wimplicit-fallthrough"
     - "-I./include"
   Remove:
     - "-W*"  # Disable all warnings from compile_commands.json
@@ -24,20 +32,31 @@ Hover:
 Diagnostics:
   ClangTidy:
     Add: 
+      # Core Google style checks
+      - "google-*"
       - "bugprone-*"
       - "cert-*"
       - "cppcoreguidelines-*"
-      - "google-*"
       - "modernize-*"
       - "performance-*"
       - "readability-*"
       - "misc-*"
+      - "clang-analyzer-*"
+      - "concurrency-*"
+      - "portability-*"
+      # Additional strict checks
+      - "hicpp-*"
+      - "llvm-namespace-comment"
+      - "llvmlibc-*"
     Remove:
+      # Exceptions for practical development
       - "modernize-use-trailing-return-type"
       - "readability-magic-numbers"
       - "cppcoreguidelines-avoid-magic-numbers"
       - "google-readability-todo"
-      - "google-runtime-references"
+      - "misc-non-private-member-variables-in-classes"
+      - "cppcoreguidelines-non-private-member-variables-in-classes"
+      - "llvmlibc-*"  # Remove LLVM libc specific checks
     CheckOptions:
       # Google C++ Style Guide naming conventions
       readability-identifier-naming.ClassCase: CamelCase
@@ -47,16 +66,22 @@ Diagnostics:
       readability-identifier-naming.TypedefCase: CamelCase
       readability-identifier-naming.TypeAliasCase: CamelCase
       readability-identifier-naming.TemplateParameterCase: CamelCase
+      readability-identifier-naming.ConceptCase: CamelCase
       
       readability-identifier-naming.FunctionCase: CamelCase
       readability-identifier-naming.MethodCase: CamelCase
+      readability-identifier-naming.PublicMethodCase: CamelCase
+      readability-identifier-naming.PrivateMethodCase: CamelCase
+      readability-identifier-naming.ProtectedMethodCase: CamelCase
       
       readability-identifier-naming.VariableCase: lower_case
       readability-identifier-naming.ParameterCase: lower_case
+      readability-identifier-naming.LocalVariableCase: lower_case
       readability-identifier-naming.MemberCase: lower_case
       readability-identifier-naming.MemberSuffix: "_"
       readability-identifier-naming.PrivateMemberSuffix: "_"
       readability-identifier-naming.ProtectedMemberSuffix: "_"
+      readability-identifier-naming.PublicMemberSuffix: ""
       
       readability-identifier-naming.ConstantCase: kCamelCase
       readability-identifier-naming.ConstantPrefix: "k"
@@ -64,6 +89,8 @@ Diagnostics:
       readability-identifier-naming.GlobalConstantPrefix: "k"
       readability-identifier-naming.StaticConstantCase: kCamelCase
       readability-identifier-naming.StaticConstantPrefix: "k"
+      readability-identifier-naming.ConstexprVariableCase: kCamelCase
+      readability-identifier-naming.ConstexprVariablePrefix: "k"
       
       readability-identifier-naming.EnumConstantCase: kCamelCase
       readability-identifier-naming.EnumConstantPrefix: "k"
@@ -71,11 +98,37 @@ Diagnostics:
       readability-identifier-naming.NamespaceCase: lower_case
       readability-identifier-naming.MacroDefinitionCase: UPPER_CASE
       
-      # Google style preferences
+      # Google specific style preferences
       google-readability-braces-around-statements.ShortStatementLines: 1
       google-readability-function-size.StatementThreshold: 800
+      google-readability-function-size.LineThreshold: 300
+      google-readability-function-size.BranchThreshold: 200
+      google-readability-function-size.ParameterThreshold: 8
       google-readability-namespace-comments.ShortNamespaceLines: 10
       google-readability-namespace-comments.SpacesBeforeComments: 2
+      
+      # Additional style enforcements
+      readability-function-size.LineThreshold: 300
+      readability-function-size.StatementThreshold: 800
+      readability-function-size.BranchThreshold: 200
+      readability-function-size.ParameterThreshold: 8
+      readability-function-size.NestingThreshold: 8
+      
+      # Line length and formatting
+      readability-line-length.LineLength: 80
+      
+      # Include what you use
+      misc-include-cleaner.IgnoreHeaders: "gtest/gtest.h;gmock/gmock.h"
+      
+      # Performance guidelines
+      performance-for-range-copy.WarnOnAllAutoCopies: true
+      performance-unnecessary-copy-initialization.AllowedTypes: "std::shared_ptr;std::unique_ptr"
+      
+      # Core guidelines enforcement
+      cppcoreguidelines-avoid-goto.IgnoreMacros: true
+      cppcoreguidelines-macro-usage.AllowedRegexp: "^(GTEST_|GMOCK_|EXPECT_|ASSERT_)"
+      cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor: true
+      cppcoreguidelines-special-member-functions.AllowMissingMoveFunctions: true
 
 Completion:
   AllScopes: Yes

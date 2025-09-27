@@ -16,10 +16,10 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# Compiler flags
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic")
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -DDEBUG")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+# Compiler flags - Google C++ Style Guide compliant
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wformat=2 -Wunused -Wnull-dereference -Wdouble-promotion -Wimplicit-fallthrough")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -DDEBUG -fsanitize=address -fsanitize=undefined")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -DGOOGLE_STRIP_LOG=1")
 
 # Include directories
 include_directories(include)

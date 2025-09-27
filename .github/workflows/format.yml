@@ -30,8 +30,8 @@ jobs:
 
     - name: Format code
       run: |
-        find src include -name "*.cc" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" | \
-        xargs clang-format -i --style=Google
+        find src include examples tests -name "*.cc" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" | \
+        xargs clang-format -i --style=file
 
     - name: Check for changes
       id: verify-changed-files
@@ -60,5 +60,5 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: '🤖 **Auto-formatted your code!** \n\nI\'ve automatically formatted your code using `clang-format` with Google style. The changes have been committed to this PR.'
+            body: '**Auto-formatted your code!** \n\nI\'ve automatically formatted your code using `clang-format` with Google style. The changes have been committed to this PR.'
           })
