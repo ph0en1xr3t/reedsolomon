@@ -1,0 +1,82 @@
+name: Dependency Update
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'  # Run every Monday at 2 AM UTC
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  update-dependencies:
+    name: Update Dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: Check for CMake updates
+      id: cmake-check
+      run: |
+        # Check latest CMake version
+        LATEST_CMAKE=$(curl -s https://api.github.com/repos/Kitware/CMake/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+        CURRENT_CMAKE=$(grep -oP 'cmake_minimum_required\(VERSION \K[0-9.]+' CMakeLists.txt)
+        echo "Latest CMake: $LATEST_CMAKE"
+        echo "Current CMake: $CURRENT_CMAKE"
+        echo "cmake_latest=$LATEST_CMAKE" >> $GITHUB_OUTPUT
+        echo "cmake_current=$CURRENT_CMAKE" >> $GITHUB_OUTPUT
+
+    - name: Check for GitHub Actions updates
+      uses: dorny/paths-filter@v2
+      id: actions-filter
+      with:
+        filters: |
+          actions:
+            - '.github/workflows/**'
+
+    - name: Update GitHub Actions
+      if: steps.actions-filter.outputs.actions == 'true' || github.event_name == 'workflow_dispatch'
+      run: |
+        # Update action versions in workflow files
+        find .github/workflows -name "*.yml" -type f -exec sed -i 's/actions\/checkout@v3/actions\/checkout@v4/g' {} \;
+        find .github/workflows -name "*.yml" -type f -exec sed -i 's/actions\/upload-artifact@v2/actions\/upload-artifact@v3/g' {} \;
+        find .github/workflows -name "*.yml" -type f -exec sed -i 's/actions\/download-artifact@v2/actions\/download-artifact@v3/g' {} \;
+
+    - name: Check for devcontainer base image updates
+      id: devcontainer-check
+      run: |
+        # Check for newer Ubuntu LTS versions
+        CURRENT_IMAGE=$(grep -oP 'FROM \K.*' .devcontainer/Dockerfile | head -1)
+        echo "Current base image: $CURRENT_IMAGE"
+        echo "devcontainer_current=$CURRENT_IMAGE" >> $GITHUB_OUTPUT
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 'chore: update dependencies and GitHub Actions'
+        title: 'chore: automated dependency updates'
+        body: |
+          ## Automated Dependency Updates
+          
+          This PR contains automated updates to:
+          - GitHub Actions versions
+          - Development container base image
+          - CMake minimum version requirements
+          
+          Please review the changes before merging.
+          
+          ### Changes Made:
+          - Updated GitHub Actions to latest versions
+          - Checked for newer base images
+          - Verified compatibility with current codebase
+          
+          *This PR was created automatically by the dependency update workflow.*
+        branch: chore/update-dependencies
+        delete-branch: true

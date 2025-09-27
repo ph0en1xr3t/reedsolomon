@@ -1,0 +1,64 @@
+name: Auto Format
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - '**.cpp'
+      - '**.cc'
+      - '**.c'
+      - '**.hpp'
+      - '**.h'
+
+jobs:
+  format:
+    name: Auto Format Code
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.head.repo.full_name == github.repository
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        ref: ${{ github.head_ref }}
+
+    - name: Install clang-format
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y clang-format
+
+    - name: Format code
+      run: |
+        find src include -name "*.cc" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" | \
+        xargs clang-format -i --style=Google
+
+    - name: Check for changes
+      id: verify-changed-files
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Commit changes
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -A
+        git commit -m "style: auto-format code with clang-format [skip ci]"
+        git push
+
+    - name: Comment on PR
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '🤖 **Auto-formatted your code!** \n\nI\'ve automatically formatted your code using `clang-format` with Google style. The changes have been committed to this PR.'
+          })
