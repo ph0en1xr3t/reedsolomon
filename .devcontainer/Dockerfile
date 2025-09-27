@@ -7,6 +7,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         make \
         clang-15 \
         clang-tools-15 \
+        clangd-15 \
         clang-tidy-15 \
         clang-format-15 \
         libc++-15-dev \
@@ -23,6 +24,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 # Set up alternatives for clang tools
 RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-15 100 \
     && update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-15 100 \
+    && update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-15 100 \
     && update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-15 100 \
     && update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-15 100 \
     && update-alternatives --install /usr/bin/lldb lldb /usr/bin/lldb-15 100
