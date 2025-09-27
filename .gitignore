@@ -36,7 +36,6 @@ tests
 *.dSYM/
 
 # IDE specific files
-.vscode/settings.json
 .vscode/c_cpp_properties.json
 .idea/
 *.swp
