@@ -212,7 +212,7 @@ GitHub Actions workflows provide:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the APACHE 2.0 Licence - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Roadmap
 
