@@ -1,0 +1,81 @@
+CompileFlags:
+  Add: 
+    - "-std=c++17"
+    - "-Wall"
+    - "-Wextra"
+    - "-Wpedantic"
+    - "-I./include"
+  Remove:
+    - "-W*"  # Disable all warnings from compile_commands.json
+    - "-f*"  # Remove unwanted flags
+
+Index:
+  Background: Build
+  StandardLibrary: Yes
+
+InlayHints:
+  Enabled: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes
+
+Hover:
+  ShowAKA: Yes
+
+Diagnostics:
+  ClangTidy:
+    Add: 
+      - "bugprone-*"
+      - "cert-*"
+      - "cppcoreguidelines-*"
+      - "google-*"
+      - "modernize-*"
+      - "performance-*"
+      - "readability-*"
+      - "misc-*"
+    Remove:
+      - "modernize-use-trailing-return-type"
+      - "readability-magic-numbers"
+      - "cppcoreguidelines-avoid-magic-numbers"
+      - "google-readability-todo"
+      - "google-runtime-references"
+    CheckOptions:
+      # Google C++ Style Guide naming conventions
+      readability-identifier-naming.ClassCase: CamelCase
+      readability-identifier-naming.StructCase: CamelCase
+      readability-identifier-naming.EnumCase: CamelCase
+      readability-identifier-naming.UnionCase: CamelCase
+      readability-identifier-naming.TypedefCase: CamelCase
+      readability-identifier-naming.TypeAliasCase: CamelCase
+      readability-identifier-naming.TemplateParameterCase: CamelCase
+      
+      readability-identifier-naming.FunctionCase: CamelCase
+      readability-identifier-naming.MethodCase: CamelCase
+      
+      readability-identifier-naming.VariableCase: lower_case
+      readability-identifier-naming.ParameterCase: lower_case
+      readability-identifier-naming.MemberCase: lower_case
+      readability-identifier-naming.MemberSuffix: "_"
+      readability-identifier-naming.PrivateMemberSuffix: "_"
+      readability-identifier-naming.ProtectedMemberSuffix: "_"
+      
+      readability-identifier-naming.ConstantCase: kCamelCase
+      readability-identifier-naming.ConstantPrefix: "k"
+      readability-identifier-naming.GlobalConstantCase: kCamelCase
+      readability-identifier-naming.GlobalConstantPrefix: "k"
+      readability-identifier-naming.StaticConstantCase: kCamelCase
+      readability-identifier-naming.StaticConstantPrefix: "k"
+      
+      readability-identifier-naming.EnumConstantCase: kCamelCase
+      readability-identifier-naming.EnumConstantPrefix: "k"
+      
+      readability-identifier-naming.NamespaceCase: lower_case
+      readability-identifier-naming.MacroDefinitionCase: UPPER_CASE
+      
+      # Google style preferences
+      google-readability-braces-around-statements.ShortStatementLines: 1
+      google-readability-function-size.StatementThreshold: 800
+      google-readability-namespace-comments.ShortNamespaceLines: 10
+      google-readability-namespace-comments.SpacesBeforeComments: 2
+
+Completion:
+  AllScopes: Yes

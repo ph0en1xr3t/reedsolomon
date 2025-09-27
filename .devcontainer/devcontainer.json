@@ -1,0 +1,70 @@
+{
+    "name": "Reed-Solomon C++ Development",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": true,
+            "configureZshAsDefaultShell": true,
+            "installOhMyZsh": true,
+            "username": "vscode",
+            "userUid": "automatic",
+            "userGid": "automatic"
+        },
+        "ghcr.io/devcontainers/features/git:1": {
+            "ppa": true,
+            "version": "os-provided"
+        }
+    },
+
+    "runArgs": [
+        "--cap-add=SYS_PTRACE",
+        "--security-opt", "seccomp=unconfined"
+    ],
+
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+                "cmake.configureOnOpen": true,
+                "clangd.arguments": [
+                    "--clang-tidy",
+                    "--completion-style=detailed",
+                    "--header-insertion=iwyu",
+                    "--suggest-missing-includes"
+                ],
+                "clangd.fallbackFlags": [
+                    "-std=c++17"
+                ]
+            },
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools",
+                "llvm-vs-code-extensions.vscode-clangd",
+                "ms-vscode.cpptools-themes",
+                "twxs.cmake",
+                "vadimcn.vscode-lldb",
+                "streetsidesoftware.code-spell-checker"
+            ]
+        }
+    },
+
+    "onCreateCommand": "echo 'Development environment ready!'",
+
+    "postCreateCommand": "cmake --version && clang --version && make --version",
+
+    "remoteUser": "vscode",
+
+    "mounts": [
+        "source=${localWorkspaceFolder}/.vscode,target=/home/vscode/.vscode,type=bind,consistency=cached"
+    ],
+
+    "containerEnv": {
+        "CC": "clang",
+        "CXX": "clang++",
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+    }
+}

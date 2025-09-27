@@ -1,0 +1,68 @@
+# Build directories
+build/
+build-*/
+out/
+cmake-build-*/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+Makefile
+compile_commands.json
+CTestTestfile.cmake
+install_manifest.txt
+
+# Object files
+*.o
+*.obj
+*.so
+*.so.*
+*.dylib
+*.dll
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+example
+tests
+
+# Debug files
+*.pdb
+*.ilk
+*.dSYM/
+
+# IDE specific files
+.vscode/settings.json
+.vscode/c_cpp_properties.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Clangd files
+.clangd/
+.cache/
+
+# Coverage files
+*.gcno
+*.gcda
+*.info
+coverage/
+
+# Testing
+Testing/
+
+# Package managers
+conan.lock
+vcpkg_installed/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
