@@ -28,7 +28,6 @@ install_manifest.txt
 *.exe
 *.out
 example
-tests
 
 # Debug files
 *.pdb
