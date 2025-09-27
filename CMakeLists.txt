@@ -64,12 +64,46 @@ endif()
 # Optional: Create tests
 option(BUILD_TESTS "Build test programs" ON)
 if(BUILD_TESTS)
-    find_package(GTest QUIET)
-    if(GTest_FOUND)
-        add_executable(tests tests/test_reedsolomon.cpp)
-        target_link_libraries(tests ${PROJECT_NAME} GTest::gtest_main)
-        add_test(NAME reedsolomon_tests COMMAND tests)
-    endif()
+    include(FetchContent)
+    
+    # Fetch Google Test
+    FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG v1.14.0  # Use latest stable version
+    )
+    
+    # For Windows: Prevent overriding the parent project's compiler/linker settings
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    
+    FetchContent_MakeAvailable(googletest)
+    
+    # Create test executable
+    add_executable(tests 
+        tests/test_reedsolomon.cpp
+        tests/test_galois_field.cpp
+        tests/test_encoder.cpp
+        tests/test_decoder.cpp
+    )
+    
+    # Link test executable against gtest & gtest_main, gmock & gmock_main
+    target_link_libraries(tests 
+        ${PROJECT_NAME}
+        gtest_main
+        gmock_main
+    )
+    
+    # Include test directories
+    target_include_directories(tests PRIVATE tests)
+    
+    # Add tests to CTest
+    add_test(NAME reedsolomon_unit_tests COMMAND tests)
+    
+    # Set test properties
+    set_target_properties(tests PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+    )
 endif()
 
 # Installation
