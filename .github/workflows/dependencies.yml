@@ -33,7 +33,7 @@ jobs:
         echo "cmake_current=$CURRENT_CMAKE" >> $GITHUB_OUTPUT
 
     - name: Check for GitHub Actions updates
-      uses: dorny/paths-filter@v2
+      uses: dorny/paths-filter@v3
       id: actions-filter
       with:
         filters: |
@@ -45,8 +45,8 @@ jobs:
       run: |
         # Update action versions in workflow files
         find .github/workflows -name "*.yml" -type f -exec sed -i 's/actions\/checkout@v3/actions\/checkout@v4/g' {} \;
-        find .github/workflows -name "*.yml" -type f -exec sed -i 's/actions\/upload-artifact@v2/actions\/upload-artifact@v3/g' {} \;
-        find .github/workflows -name "*.yml" -type f -exec sed -i 's/actions\/download-artifact@v2/actions\/download-artifact@v3/g' {} \;
+        find .github/workflows -name "*.yml" -type f -exec sed -i 's/actions\/upload-artifact@v3/actions\/upload-artifact@v4/g' {} \;
+        find .github/workflows -name "*.yml" -type f -exec sed -i 's/actions\/download-artifact@v3/actions\/download-artifact@v4/g' {} \;
 
     - name: Check for devcontainer base image updates
       id: devcontainer-check
