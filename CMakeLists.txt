@@ -45,8 +45,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 # Target include directories
-target_include_directories(${PROJECT_NAME} 
-    PUBLIC 
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
@@ -65,40 +65,40 @@ endif()
 option(BUILD_TESTS "Build test programs" ON)
 if(BUILD_TESTS)
     include(FetchContent)
-    
+
     # Fetch Google Test
     FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://github.com/google/googletest.git
         GIT_TAG v1.14.0  # Use latest stable version
     )
-    
+
     # For Windows: Prevent overriding the parent project's compiler/linker settings
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-    
+
     FetchContent_MakeAvailable(googletest)
-    
+
     # Create test executable
-    add_executable(tests 
+    add_executable(tests
         tests/test_reedsolomon.cpp
         tests/test_galois_field.cpp
         tests/test_encoder.cpp
         tests/test_decoder.cpp
     )
-    
+
     # Link test executable against gtest & gtest_main, gmock & gmock_main
-    target_link_libraries(tests 
+    target_link_libraries(tests
         ${PROJECT_NAME}
         gtest_main
         gmock_main
     )
-    
+
     # Include test directories
     target_include_directories(tests PRIVATE tests)
-    
+
     # Add tests to CTest
     add_test(NAME reedsolomon_unit_tests COMMAND tests)
-    
+
     # Set test properties
     set_target_properties(tests PROPERTIES
         CXX_STANDARD 20
@@ -125,3 +125,30 @@ export(TARGETS ${PROJECT_NAME} FILE ${PROJECT_NAME}Config.cmake)
 
 # Generate compile_commands.json for clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+option(BUILD_DOC "Build documentation with Doxygen" ON)
+if(BUILD_DOC)
+    find_package(Doxygen)
+    if(DOXYGEN_FOUND)
+        # Use the existing Doxyfile directly
+        set(DOXYGEN_OUT ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+        message(STATUS "Doxygen build configured")
+
+        # Note the option ALL which allows to build the docs together with the application
+        add_custom_target(doc_doxygen ALL
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM)
+
+        # Create a separate target for documentation only
+        add_custom_target(docs
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM)
+
+    else (DOXYGEN_FOUND)
+        message("Doxygen needs to be installed to generate the documentation")
+    endif (DOXYGEN_FOUND)
+endif()

@@ -183,6 +183,40 @@ ctest --verbose
 ./tests --gtest_filter="EncoderTest.*"
 ```
 
+## Documentation
+
+This project includes comprehensive API documentation generated with Doxygen.
+
+### Generating Documentation
+
+```bash
+# Using CMake (recommended)
+cmake --build build --target docs
+
+# Or directly with Doxygen
+doxygen Doxyfile
+
+# Using VS Code task
+# Press Ctrl+Shift+P -> "Tasks: Run Task" -> "docs"
+```
+
+### Viewing Documentation
+
+After generation, open `doc/html/index.html` in your browser to view the complete documentation including:
+
+- **API Reference**: Detailed function documentation
+- **Code Examples**: Usage patterns and best practices
+- **Algorithm Overview**: Reed-Solomon theory and implementation details
+- **Class Diagrams**: Visual representation of code structure
+- **Call Graphs**: Function dependency visualization
+
+The documentation features:
+- **Main Page**: This README.md serves as the documentation homepage
+- **Function signatures** with parameter descriptions and return value specifications
+- **Usage examples** and code snippets from the examples/ directory
+- **Mathematical background** and algorithm explanations
+- **Cross-references** and navigation aids throughout the codebase
+
 ## Continuous Integration
 
 GitHub Actions workflows provide:
