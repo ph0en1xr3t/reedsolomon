@@ -1,3 +1,5 @@
+![alt text](doc/images/reedsolomon.png)
+
 # Reed-Solomon Error Correction Code Implementation
 
 A C++ implementation framework for Reed-Solomon (RS) error correction codes, designed for educational and development purposes.
@@ -10,7 +12,7 @@ A C++ implementation framework for Reed-Solomon (RS) error correction codes, des
 
 ### Current Implementation
 - **Modern C++ Framework**: C++20 standards with CMake build system
-- **Comprehensive Testing**: Google Test (GTest) and Google Mock (GMock) integration  
+- **Comprehensive Testing**: Google Test (GTest) and Google Mock (GMock) integration
 - **Development Tools**: VS Code devcontainer, clangd integration, GitHub Actions CI/CD
 - **Google Style Guide**: Enforced coding standards with automated formatting
 - **Cross-Platform**: Builds on Linux, macOS, and Windows (via devcontainer)
@@ -73,7 +75,7 @@ bool rs_decode(std::vector<unsigned char>& data, int parity_len, const std::vect
 ### Prerequisites
 
 - **C++ Compiler**: GCC 9+ or Clang 10+ with C++20 support
-- **CMake**: Version 3.16 or higher  
+- **CMake**: Version 3.16 or higher
 - **Git**: For cloning and dependencies
 
 ### Quick Start
@@ -115,7 +117,7 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 # Disable examples
 cmake -DBUILD_EXAMPLES=OFF ..
 
-# Disable tests  
+# Disable tests
 cmake -DBUILD_TESTS=OFF ..
 
 # Use specific compiler
@@ -164,7 +166,7 @@ The project uses Google Test framework with comprehensive test suites:
 ### Test Categories
 
 - **Unit Tests**: Individual function testing (`test_reedsolomon.cpp`)
-- **Galois Field Tests**: Mathematical operations (`test_galois_field.cpp`)  
+- **Galois Field Tests**: Mathematical operations (`test_galois_field.cpp`)
 - **Encoder Tests**: Encoding functionality (`test_encoder.cpp`)
 - **Decoder Tests**: Decoding and error correction (`test_decoder.cpp`)
 
